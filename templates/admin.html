@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — ink&idea</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --border: #2a2a2a;
+      --accent: #e8c97e;
+      --text: #f0ede8;
+      --muted: #7a7570;
+      --card: #1c1c1c;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 5%;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .admin-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .admin-logo span { color: var(--accent); font-style: italic; }
+    .admin-logo sm { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-left: 0.5rem; }
+
+    .logout-btn {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: color 0.3s;
+    }
+    .logout-btn:hover { color: #ff7675; }
+
+    /* ── MAIN CONTAINER ── */
+    .container {
+      flex: 1;
+      max-width: 800px;
+      width: 90%;
+      margin: 3rem auto;
+    }
+
+    .form-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 3rem;
+      position: relative;
+    }
+
+    .panel-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: var(--text);
+    }
+
+    /* ── FLASH MESSAGES ── */
+    .flash-msg {
+      background: rgba(232, 201, 126, 0.1);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    /* ── FORM ELEMENTS ── */
+    .form-group {
+      margin-bottom: 1.8rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.85rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 250px;
+      line-height: 1.7;
+    }
+
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2.5rem;
+      background: var(--accent);
+      color: #0d0d0d;
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      border: none;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .submit-btn:hover {
+      background: #f0d898;
+      transform: translateY(-2px);
+    }
+
+    .view-blog-link {
+      display: inline-block;
+      margin-top: 1.5rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.3s;
+    }
+    .view-blog-link:hover { color: var(--text); }
+    
+.ck-editor__editable {
+    min-height: 300px;
+    background: #111 !important;
+    color: #fff !important;
+}
+
+.ck-content {
+    color: #fff !important;
+}
+
+.ck.ck-toolbar {
+    background: #1a1a1a !important;
+    border-color: #333 !important;
+}
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
+    <a href="/blog" class="admin-logo">nav<span>&</span>idea <sm>// Dashboard</sm></a>
+    <a href="{{ url_for('logout') }}" class="logout-btn">Logout →</a>
+  </header>
+
+
+  <div class="container">
+    
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash-msg">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <div class="form-card">
+      <h2 class="panel-title">Write a New Masterpiece</h2>
+      
+      <form action="{{ url_for('new_post') }}" method="POST">
+        
+        <div class="form-group">
+          <label for="title">Article Title</label>
+          <input type="text" id="title" name="title" placeholder="e.g., The Art of Saying Less" required />
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category</label>
+          <input type="text" id="category" name="category" placeholder="e.g., Design, Tech, Lifestyle" required />
+        </div>
+
+        <div class="form-group">
+          <label for="content">Story Content</label>
+
+<textarea id="editor" name="content" placeholder="Type or paste your beautiful content here...">
+</textarea>     
+</div>
+
+        <button type="submit" class="submit-btn">Publish Post →</button>
+      </form>
+
+      <a href="{{ url_for('blog') }}" class="view-blog-link">← Back to Blog</a>
+    </div>
+  </div>
+ <script>
+let editorInstance;
+
+ClassicEditor
+    .create(document.querySelector('#editor'))
+    .then(editor => {
+        editorInstance = editor;
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
+document.querySelector('form').addEventListener('submit', function(e) {
+    if (editorInstance) {
+        const content = editorInstance.getData();
+        
+        // Manual validation
+        if (!content || content.trim() === '') {
+            alert('add some content to your post before publishing!');
+            e.preventDefault();
+            return;
+        }
+        
+        document.querySelector('#editor').value = content;
+    }
+});
+</script>
+
+
+
+
+
+</body>
+</html>

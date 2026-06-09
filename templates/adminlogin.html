@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Gateway — ink&idea</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <style>
+        body { background: #0d0d0d; color: #f0ede8; font-family: 'DM Sans', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-box { background: #161616; border: 1px solid #2a2a2a; padding: 3rem; width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { margin-top: 0; color: #e8c97e; font-family: 'Playfair Display', serif; font-weight: normal; font-size: 1.8rem; margin-bottom: 1.5rem; }
+        label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #7a7570; margin-bottom: 0.5rem; }
+        input { width: 100%; padding: 12px; margin-bottom: 1.5rem; background: #0d0d0d; border: 1px solid #2a2a2a; color: #fff; box-sizing: border-box; font-family: inherit; }
+        input:focus { outline: none; border-color: #e8c97e; }
+        button { width: 100%; padding: 12px; background: #e8c97e; border: none; color: #0d0d0d; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; transition: background 0.3s; }
+        button:hover { background: #f0d898; }
+        .flash-msg { background: rgba(255, 118, 117, 0.1); border: 1px solid #ff7675; color: #ff7675; padding: 10px; font-size: 0.85rem; margin-bottom: 1.5rem; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <h2>Admin Gateway</h2>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash-msg">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('adminlogin') }}" method="POST">
+            <label>Admin Username</label>
+            <input type="text" name="username" placeholder="e.g., admin" required>
+            
+            <label>Secret Password</label>
+            <input type="password" name="password" placeholder="••••••••" required>
+            
+            <button type="submit">Unlock Dashboard →</button>
+        </form>
+    </div>
+
+</body>
+</html>
