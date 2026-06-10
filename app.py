@@ -145,6 +145,52 @@ def new_post():
 
     return render_template('admin.html')
 
+@app.route('/admin/posts')
+def manage_posts():
+    if not session.get('logged_in'):
+        return redirect(url_for('adminlogin'))
+
+    posts = Post.query.order_by(Post.id.desc()).all()
+    return render_template('manage_posts.html', posts=posts)
+
+
+
+
+@app.route('/delete_post/<int:id>')
+def delete_post(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('adminlogin'))
+
+    post = Post.query.get_or_404(id)
+
+    db.session.delete(post)
+    db.session.commit()
+
+    flash('Post deleted successfully!')
+    return redirect(url_for('manage_posts'))
+
+
+
+@app.route('/edit_post/<int:id>', methods=['GET', 'POST'])
+def edit_post(id):
+
+    if not session.get('logged_in'):
+        return redirect(url_for('adminlogin'))
+
+    post = Post.query.get_or_404(id)
+
+    if request.method == 'POST':
+
+        post.title = request.form['title']
+        post.category = request.form['category']
+        post.content = request.form['content']
+
+        db.session.commit()
+
+        flash('Post updated successfully!')
+        return redirect(url_for('manage_posts'))
+
+    return render_template('edit_post.html', post=post)
 
 # ── 4. MAIN PAGES ROUTES ──
 @app.route('/home')

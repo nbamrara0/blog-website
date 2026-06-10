@@ -158,7 +158,7 @@
       transition: color 0.3s;
     }
     .view-blog-link:hover { color: var(--text); }
-    
+
 .ck-editor__editable {
     min-height: 300px;
     background: #111 !important;
@@ -187,7 +187,7 @@
 
 
   <div class="container">
-    
+
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         {% for message in messages %}
@@ -197,9 +197,9 @@
     {% endwith %}
     <div class="form-card">
       <h2 class="panel-title">Write a New Masterpiece</h2>
-      
+
       <form action="{{ url_for('new_post') }}" method="POST">
-        
+
         <div class="form-group">
           <label for="title">Article Title</label>
           <input type="text" id="title" name="title" placeholder="e.g., The Art of Saying Less" required />
@@ -214,17 +214,20 @@
           <label for="content">Story Content</label>
 
 <textarea id="editor" name="content" placeholder="Type or paste your beautiful content here...">
-</textarea>     
+</textarea>
 </div>
 
         <button type="submit" class="submit-btn">Publish Post →</button>
       </form>
-
+<a href="{{ url_for('manage_posts') }}"
+   class="view-blog-link">
+   Manage All Posts →
+</a>
       <a href="{{ url_for('blog') }}" class="view-blog-link">← Back to Blog</a>
     </div>
   </div>
  <script>
-let editorInstance;
+
 
 ClassicEditor
     .create(document.querySelector('#editor'))
@@ -238,14 +241,14 @@ ClassicEditor
 document.querySelector('form').addEventListener('submit', function(e) {
     if (editorInstance) {
         const content = editorInstance.getData();
-        
+
         // Manual validation
         if (!content || content.trim() === '') {
             alert('add some content to your post before publishing!');
             e.preventDefault();
             return;
         }
-        
+
         document.querySelector('#editor').value = content;
     }
 });
