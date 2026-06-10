@@ -7,12 +7,14 @@
 
 <h1>{{ post.title }}</h1>
 
-<p>
-    Category: {{ post.category }}
-</p>
+    <div class="content">
+        {{ post.content | safe }}
+    </div>
 
-<div>
-    {{ post.content | safe }}
+    <a href="{{ url_for('blog') }}" class="back-btn">
+        ← Back to Blog
+    </a>
+
 </div>
 
 </body>

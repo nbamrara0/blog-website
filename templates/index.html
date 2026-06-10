@@ -527,8 +527,8 @@
     {{ post.content[:200] }}...
 </p>
 
-<a href="{{ url_for('post_detail', id=post.id) }}">
-    Read More
+<a href="{{ url_for('post_detail', id=post.id) }}" class="card-read">
+    Read More <span class="arrow">→</span>
 </a>
 </div>
 {% endfor %}
