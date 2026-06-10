@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }}</title>
+</head>
+<body>
+
+<h1>{{ post.title }}</h1>
+
+<p>
+    Category: {{ post.category }}
+</p>
+
+<div>
+    {{ post.content | safe }}
+</div>
+
+</body>
+</html>

@@ -405,11 +405,13 @@
         <div class="card-inner">
           <span class="card-tag">Post</span>
           <h1 class="card-title">{{ post.title }}</h1>
-          <p class="card-excerpt">{{ post.content | safe }}...</p>
+         <p class="card-excerpt">{{ post.content[:250] }}...</p>
 
           <div class="card-meta">
             <span class="card-date">{{ post.date if post.date else '' }}</span>
-            <a href="{{ url_for('blog') }}" class="card-read">Read More <span class="arrow">→</span></a>
+           <a href="{{ url_for('post_detail', id=post.id) }}">
+    Read More
+</a>
           </div>
         </div>
       </article>

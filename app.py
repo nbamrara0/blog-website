@@ -145,6 +145,12 @@ def new_post():
 
     return render_template('admin.html')
 
+@app.route("/post/<int:id>")
+def post_detail(id):
+    post = Post.query.get_or_404(id)
+    return render_template("post_detail.html", post=post)
+
+
 @app.route('/admin/posts')
 def manage_posts():
     if not session.get('logged_in'):

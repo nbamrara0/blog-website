@@ -521,12 +521,15 @@
 
 {% for post in posts %}
 <div class="blog-card">
-    <h3>{{ post.title }}</h3>
-    <p>{{ post.content | safe }}</p>
+   <h3>{{ post.title }}</h3>
 
-    <a href="{{ url_for('blog') }}">
-        Read More
-    </a>
+<p>
+    {{ post.content[:200] }}...
+</p>
+
+<a href="{{ url_for('post_detail', id=post.id) }}">
+    Read More
+</a>
 </div>
 {% endfor %}
  
