@@ -33,7 +33,11 @@ class User(db.Model):
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)    
    
-    
+class messages(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(150), nullable=False)
+    message = db.Column(db.Text, nullable=False)
 
 
 with app.app_context():
@@ -221,8 +225,29 @@ def blog():
 
 @app.route("/about")
 def about():
-    return redirect(url_for('home'))
+    return render_template('about_page.html')
 
+@app.route("/contact", methods=["GET", "POST"])
+def contact():
+
+    if request.method == "POST":
+
+        username = request.form["username"]
+        email = request.form["email"]
+        user_message = request.form["message"]
+
+        new_message = messages(
+            name=username,
+            email=email,
+            message=user_message
+        )
+
+        db.session.add(new_message)
+        db.session.commit()
+
+        return redirect(url_for("contact"))
+
+    return render_template("contact_page.html")
 
 # ── 5. SINGLE COMBINED LOGOUT ROUTE ──
 @app.route('/logout')
