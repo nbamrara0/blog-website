@@ -1,24 +1,19 @@
 import os
-import sys
-import traceback
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from dotenv import load_dotenv
 
-print("Starting Flask app initialization...", file=sys.stderr)
-print("Python version:", sys.version, file=sys.stderr)
-
 load_dotenv()
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "your_secret_key_here"  
+app.config['SECRET_KEY'] = "your_secret_key_here"
 
 
-ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')  
+ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
 ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'mysecretpassword123')
 
 # Database Setup
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////app/instance/blog.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -29,15 +24,15 @@ class Post(db.Model):
     category = db.Column(db.String(50), nullable=False)
     content = db.Column(db.Text, nullable=False)
     date_posted = db.Column(db.DateTime, default=datetime.utcnow)
- 
-    
+
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(150), nullable=False)    
-   
+    password = db.Column(db.String(150), nullable=False)
+
 class messages(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -45,15 +40,8 @@ class messages(db.Model):
     message = db.Column(db.Text, nullable=False)
 
 
-try:
-    with app.app_context():
-        print("Creating database tables...", file=sys.stderr)
-        db.create_all()
-        print("Database tables created successfully", file=sys.stderr)
-except Exception as e:
-    print(f"CRITICAL: Database initialization failed: {e}", file=sys.stderr)
-    traceback.print_exc(file=sys.stderr)
-    raise
+with app.app_context():
+    db.create_all()
 
 @app.route('/all-users')
 def all_users():
@@ -131,14 +119,14 @@ def adminlogin():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        
+
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
-            session['logged_in'] = True  
+            session['logged_in'] = True
             flash('Welcome back, Admin!', 'success')
             return redirect(url_for('new_post'))
         else:
             flash('Invalid ID or Password! Please try again.', 'danger')
-            
+
     return render_template('adminlogin.html')
 
 
@@ -271,11 +259,5 @@ def logout():
     return redirect(url_for('login_page'))
 
 
-print("Flask app loaded successfully", file=sys.stderr)
-
-@app.errorhandler(Exception)
-def handle_error(error):
-    print(f"Application error: {error}")
-    import traceback
-    traceback.print_exc()
-    return "Internal Server Error", 500
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=8000)
