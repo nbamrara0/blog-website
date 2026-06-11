@@ -163,7 +163,9 @@ def manage_posts():
     posts = Post.query.order_by(Post.id.desc()).all()
     return render_template('manage_posts.html', posts=posts)
 
-
+@app.route('/health')
+def health():
+    return "OK"
 
 
 @app.route('/delete_post/<int:id>')
