@@ -40,8 +40,11 @@ class messages(db.Model):
     message = db.Column(db.Text, nullable=False)
 
 
-with app.app_context():
-    db.create_all()
+try:
+    with app.app_context():
+        db.create_all()
+except Exception as e:
+    print(f"Database initialization error: {e}")
 
 @app.route('/all-users')
 def all_users():
@@ -259,5 +262,9 @@ def logout():
     return redirect(url_for('login_page'))
 
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8000)
+@app.errorhandler(Exception)
+def handle_error(error):
+    print(f"Application error: {error}")
+    import traceback
+    traceback.print_exc()
+    return "Internal Server Error", 500
