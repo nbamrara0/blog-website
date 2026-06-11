@@ -1,8 +1,13 @@
 import os
+import sys
+import traceback
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from dotenv import load_dotenv
+
+print("Starting Flask app initialization...", file=sys.stderr)
+print("Python version:", sys.version, file=sys.stderr)
 
 load_dotenv()
 app = Flask(__name__)
@@ -42,9 +47,13 @@ class messages(db.Model):
 
 try:
     with app.app_context():
+        print("Creating database tables...", file=sys.stderr)
         db.create_all()
+        print("Database tables created successfully", file=sys.stderr)
 except Exception as e:
-    print(f"Database initialization error: {e}")
+    print(f"CRITICAL: Database initialization failed: {e}", file=sys.stderr)
+    traceback.print_exc(file=sys.stderr)
+    raise
 
 @app.route('/all-users')
 def all_users():
@@ -261,6 +270,8 @@ def logout():
     flash('You have been logged out.', 'success')
     return redirect(url_for('login_page'))
 
+
+print("Flask app loaded successfully", file=sys.stderr)
 
 @app.errorhandler(Exception)
 def handle_error(error):
