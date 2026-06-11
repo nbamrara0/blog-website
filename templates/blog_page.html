@@ -405,7 +405,7 @@
         <div class="card-inner">
           <span class="card-tag">Post</span>
           <h1 class="card-title">{{ post.title }}</h1>
-         <p class="card-excerpt">{{ post.content[:250] }}...</p>
+         <p class="card-excerpt">{{ post.content[:250]|safe }}...</p>
 
           <div class="card-meta">
             <span class="card-date">{{ post.date if post.date else '' }}</span>

@@ -526,7 +526,7 @@
    <h3>{{ post.title }}</h3>
 
 <p>
-    {{ post.content[:200] }}...
+    {{ post.content[:200]|safe }}...
 </p>
 
 <a href="{{ url_for('post_detail', id=post.id) }}" class="card-read">
