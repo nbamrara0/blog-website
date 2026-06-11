@@ -246,7 +246,7 @@ def contact():
 
         db.session.add(new_message)
         db.session.commit()
-
+        print("Saved Successfully")
         return redirect(url_for("contact"))
 
     return render_template("contact_page.html")
