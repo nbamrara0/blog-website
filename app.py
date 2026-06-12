@@ -163,9 +163,6 @@ def manage_posts():
     posts = Post.query.order_by(Post.id.desc()).all()
     return render_template('manage_posts.html', posts=posts)
 
-@app.route("/test")
-def test():
-    return "Website Working"
 
 
 @app.route('/delete_post/<int:id>')
