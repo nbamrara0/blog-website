@@ -3,8 +3,8 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from dotenv import load_dotenv
-
 load_dotenv()
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "your_secret_key_here"
 
@@ -13,9 +13,9 @@ ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
 ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'mysecretpassword123')
 
 # Database Setup
-# database_url = os.getenv("DATABASE_URL")
+# database_url =
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://bamrara:8Qva8loQ9FZfXeCp4m28vtphSzBGM0cL@dpg-d8836pgg4nts73eogpmg-a.oregon-postgres.render.com/house_db_bqk1"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "connect_args": {"sslmode": "require"}
