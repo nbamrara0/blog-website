@@ -69,25 +69,6 @@ def root():
 
 
 # ── 2. USER AUTHENTICATION ROUTES ──
-@app.route('/login', methods=['GET', 'POST'])
-def login_page():
-    if request.method == 'POST':
-        email = request.form.get('email', '').strip()
-        password = request.form.get('password', '').strip()
-
-        users = Users.query.filter_by(email=email).first()
-
-        if users and users.password == password:
-            session['user'] = users.username
-            flash(f'Welcome back, {users.username}!', 'success')
-            return redirect(url_for('home'))
-
-        flash('Invalid email or password', 'error')
-
-    return render_template('login.html')
-
-
-
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -96,9 +77,9 @@ def register():
     email = request.form.get('email')
     password = request.form.get('password')
 
-    existing_user = Users.query.filter_by(email=email).first()
+    existing_users = Users.query.filter_by(email=email).first()
 
-    if existing_user:
+    if existing_users:
         flash("Email already registered", "error")
         return redirect(url_for('login_page'))
 
@@ -114,6 +95,25 @@ def register():
     flash("Account Created Successfully", "success")
 
     return redirect(url_for('login_page'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login_page():
+    if request.method == 'POST':
+        email = request.form.get('email', '').strip()
+        password = request.form.get('password', '').strip()
+
+        users = Users.query.filter_by(email=email).first()
+
+        if users and users.password == password:
+            session['users'] = users.username
+            flash(f'Welcome back, {users.username}!', 'success')
+            return redirect(url_for('home'))
+
+        flash('Invalid email or password', 'error')
+
+    return render_template('login.html')
+
+
 
 
 # ── 3. ADMIN PANEL ROUTES ──
