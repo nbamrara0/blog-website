@@ -30,7 +30,7 @@ class Post(db.Model):
 
 
 
-class User(db.Model):
+class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
@@ -49,15 +49,15 @@ with app.app_context():
 @app.route('/all-users')
 def all_users():
 
-    users = User.query.all()
+    users = Users.query.all()
 
     result = ""
 
-    for user in users:
+    for users in users:
         result += f"""
-        ID: {user.id}<br>
-        Username: {user.username}<br>
-        Email: {user.email}<br>
+        ID: {users.id}<br>
+        Username: {users.username}<br>
+        Email: {users.email}<br>
         <hr>
         """
 
@@ -75,11 +75,11 @@ def login_page():
         email = request.form.get('email', '').strip()
         password = request.form.get('password', '').strip()
 
-        user = User.query.filter_by(email=email).first()
+        users = Users.query.filter_by(email=email).first()
 
-        if user and user.password == password:
-            session['user'] = user.username
-            flash(f'Welcome back, {user.username}!', 'success')
+        if users and users.password == password:
+            session['user'] = users.username
+            flash(f'Welcome back, {users.username}!', 'success')
             return redirect(url_for('home'))
 
         flash('Invalid email or password', 'error')
@@ -96,19 +96,19 @@ def register():
     email = request.form.get('email')
     password = request.form.get('password')
 
-    existing_user = User.query.filter_by(email=email).first()
+    existing_user = Users.query.filter_by(email=email).first()
 
     if existing_user:
         flash("Email already registered", "error")
         return redirect(url_for('login_page'))
 
-    user = User(
+    users = Users(
         username=username,
         email=email,
         password=password
     )
 
-    db.session.add(user)
+    db.session.add(users)
     db.session.commit()
 
     flash("Account Created Successfully", "success")
