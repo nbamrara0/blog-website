@@ -207,7 +207,7 @@ def edit_post(id):
 # ── 4. MAIN PAGES ROUTES ──
 @app.route('/home')
 def home():
-    if 'user' not in session:
+    if 'users' not in session:
         flash('Please log in to continue.', 'error')
         return redirect(url_for('login_page'))
     latest_posts = Post.query\
