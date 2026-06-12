@@ -13,13 +13,14 @@ ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
 ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'mysecretpassword123')
 
 # Database Setup
-database_url = os.getenv("DATABASE_URL")
+database_url = os.getenv("DATABASE_URL", "sqlite:///blog.db")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-    "connect_args": {"sslmode": "require"}
-}
+if not database_url.startswith("sqlite"):
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+        "connect_args": {"sslmode": "require"}
+    }
 
 db = SQLAlchemy(app)
 # Blog Post Database Model
