@@ -15,11 +15,9 @@ ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'mysecretpassword123')
 # Database Setup
 # database_url =
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-    "connect_args": {"sslmode": "require"}
-}
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 
 db = SQLAlchemy(app)
 # Blog Post Database Model
