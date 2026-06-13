@@ -255,7 +255,7 @@ def contact():
 @app.route('/logout')
 def logout():
     # Yeh dono sessions (User aur Admin) ko clear kar dega
-    session.pop('user', None)
+    session.pop('users', None)
     session.pop('logged_in', None)
     flash('You have been logged out.', 'success')
     return redirect(url_for('login_page'))
